@@ -1,82 +1,308 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #968d29;
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #968d29;
 }
 
 .App {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .header {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center; 
-  padding-bottom: 20px;
-  padding-top: 20px;
-  top: 0;
-  height: 10%;
-  background-color: rgba(65, 69, 73, 0.49);
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    top: 0;
+    height: 10%;
+    background-color: rgba(65, 69, 73, 0.49);
 }
 
 .top-left {
-  padding: 20px;
-  left: 0;
-  width: 90%;
-  display: inline-flex;
-  float: left;
-  color: #353532;
+    padding: 20px;
+    left: 0;
+    width: 90%;
+    display: inline-flex;
+    float: left;
+    color: #353532;
 }
 
 .top-right {
-  padding: 20px;
-  position:relative;
-  float: right;
-  display: inline-flex;
+    padding: 20px;
+    position: relative;
+    float: right;
+    display: inline-flex;
 }
 
-#con {
-  color: #4d4d48;
-  background-color: #bbc28d;
-  border-radius: 8px;
-  padding: 10px 20px;
-  text-decoration: none;
-  display: inline-flex;
-  font-size: 30px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, transform 0.2s;
+.conection {
+    color: #4d4d48;
+    background-color: #bbc28d;
+    border-radius: 8px;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-flex;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-#con:hover {
-  background-color: #b9b929;
-  transform: scale(1.05);
+.conection:hover {
+    background-color: #b9b929;
+    transform: scale(1.05);
 }
 
 .body {
-  position: absolute;
-  top: 10%; 
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
+    position: absolute;
+    top: 10%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .time {
-  display: flex;
-  font-size: 25px;
-  font-weight: bold;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    font-size: 25px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.addCandidates {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    background: #c37b2330;
+    border: 0;
+    margin: 10px;
+    outline: none;
+    width: 80vw;
+    max-width: 400px;
+    font-size: 1.5em;
+    transition: padding 0.3s 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:focus {
+        padding-bottom: 5px;
+    }
+
+    &:focus + .line:after {
+        transform: scaleX(1);
+    }
+}
+
+.line {
+    width: 100%;
+    height: 3px;
+    position: absolute;
+    bottom: -8px;
+    background: #bdc3c7;
+}
+
+.line:after {
+    content: " ";
+    position: absolute;
+    float: right;
+    width: 100%;
+    height: 3px;
+    transform: scaleX(0);
+    transition: transform 3s ease;
+}
+
+.form__group {
+    position: relative;
+    left: 5px;
+    padding: 15px 0 0;
+    margin-top: 10px;
+    width: 70%;
+    min-width: 300px;
+    min-height: 200px;
+    margin-right: 20px;
+}
+
+.form__field {
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid #9b9b9b; /* Replace with your gray color */
+    outline: 0;
+    font-size: 1.3rem;
+    color: #f3f3ca; /* Replace with your white color */
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+
+    &::placeholder {
+        color: #4d4d48;
+    }
+
+    &:placeholder-shown ~ .form__label {
+        font-size: 1.3rem;
+        cursor: text;
+        top: 20px;
+    }
+}
+
+.form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: #9b9b9b; /* Replace with your gray color */
+}
+
+.form__field:focus {
+    ~ .form__label {
+        position: absolute;
+        top: 0;
+        display: block;
+        transition: 0.2s;
+        font-size: 1rem;
+        font-weight: 480;
+    }
+    padding-bottom: 6px;
+    font-weight: 480;
+    border-width: 3px;
+    border-image: linear-gradient(
+        to right,
+        #7c7a07b5,
+        rgba(145, 116, 63, 0.911)
+    ); /* Replace with your primary and secondary colors */
+    border-image-slice: 1;
+}
+
+.form__field {
+    &:required,
+    &:invalid {
+        box-shadow: none;
+    }
+}
+
+.candidateBtn {
+    position: relative;
+    right: 20px;
+    bottom: 130px;
+    background: rgba(169, 137, 79, 0.911);
+    color: #ffffffab;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    min-width: 320px;
+    margin-left: 50px;
+}
+.candidateBtn:hover {
+    background: rgba(
+        129,
+        103,
+        56,
+        0.911
+    ); /* Maintain the same gradient on hover */
+}
+
+.candidateBtn:disabled {
+    background: #ccc; /* Grey out the button when disabled */
+    cursor: not-allowed; /* Set cursor to not allowed */
+}
+
+.candidateBtn:focus {
+    outline: none; /* Remove outline on focus */
+}
+
+.candidateBtn:active {
+    background: #964b00; /* Darken the color when clicked */
+}
+
+.fildes {
+    display: flex;
+    flex-direction: row;
+}
+
+.vote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+tr:hover {
+    background-color: #748788;
+}
+
+tr {
+    transition: background-color 0.3s ease;
+}
+
+td,
+th {
+    padding: 10px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+tbody tr {
+    border: 1px solid #ddd;
+}
+
+thead {
+    background-color: #95a5a6;
+}
+
+td {
+    align-items: center;
+    justify-content: center;
+}
+.canditates-parent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.topic {
+    font-size: 30px;
+}
+
+.btn {
+    min-height: 60px;
+    font-size: 25px;
+}
+
+#scrollbar1::-webkit-scrollbar {
+    width: 10px;
+}
+
+#scrollbar1::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background-color: #42484988;
+}
+
+#scrollbar1::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #d55959;
 }

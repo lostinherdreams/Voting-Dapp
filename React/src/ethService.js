@@ -11,6 +11,14 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 // For this, you need the account signer.
 const signer = provider.getSigner();
 
+//get account
+let accounts = await ethereum.request({
+    method: "eth_requestAccounts",
+    params: [],
+});
+let account = accounts[0];
+
+
 export const contract = new ethers.Contract(
     contractAddress,
     contractAbi,
@@ -20,11 +28,7 @@ export const contract = new ethers.Contract(
 //getting contract functions
 export const getUserAddress = async () => {
     try {
-        let accounts = await ethereum.request({
-            method: "eth_requestAccounts",
-            params: [],
-        });
-        let account = accounts[0];
+        
         return account;
     } catch (error) {
         console.error("Error getting user address:", error.message);
@@ -45,6 +49,31 @@ export const getRemainingTime = async () => {
 };
 
 export const getCandidates = async () => {
-    const candidates = await contract.candidates;
+    const candidates = await contract.getCandidates();
     console.log(candidates);
+    return candidates;
 };
+
+export const hasVoted = async () => {
+    const has = await contract.hasVoted(account);
+    console.log(has);
+    return has;
+}
+
+export async function addCandidate(name){
+    try{
+        await contract.connect(signer).addCandidate(name);
+    }catch(error){
+        console.error("Error adding candidate:", error);
+        throw error; 
+    }
+}
+
+export async function vote(name){
+    try{
+        await contract.connect(signer).vote(name);
+    }catch(error){
+        console.error("Error voting:", error);
+        throw error; 
+    }
+}
