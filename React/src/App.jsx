@@ -3,28 +3,37 @@ import * as ethService from "./ethService";
 import "./App.css";
 import { ethers } from "ethers";
 
+//if not connected connect
 const ConnectBtn = () => {
-    const [buttonText, setButtonText] = useState("Connect");
-    let flag = false;
+    const [buttonText, setButtonText] = useState("Conecting...");
     const handleClick = async () => {
         try {
-            const userAddress = await ethService.getUserAddress();
+            let userAddress = await ethService.getUserAddress();
             setButtonText(userAddress);
-            flag = true;
         } catch (error) {
             console.error("Error fetching user address:", error);
         }
     };
     useEffect(() => {
-        // Add an event listener for 'accountsChange'
-        const handleAccountsChanged = async () => {
-            if (flag) {
+        const fetchUserAddress = async () => {
+            try {
                 const userAddress = await ethService.getUserAddress();
-                handleClick(userAddress);
+                setButtonText(userAddress);
+                ethService.hasVoted;
+            } catch (error) {
+                console.error("Error fetching user address:", error);
+                setButtonText("Error");
             }
         };
 
         if (window.ethereum) {
+            fetchUserAddress();
+
+            // Add an event listener for 'accountsChange'
+            const handleAccountsChanged = async () => {
+                handleClick();
+            };
+
             // Add the event listener
             window.ethereum.on("accountsChanged", handleAccountsChanged);
 
@@ -34,23 +43,27 @@ const ConnectBtn = () => {
             };
         }
     }, []);
-
-    return (
-        <button onClick={handleClick} className="conection">
-            {buttonText}
-        </button>
-    );
+    return <button className="conection">{buttonText}</button>;
 };
 
-const CandidateForm = ({ remainingTime, hasVoted }) => {
+const CandidateForm = ({ remainingTime }) => {
     const [inputValue, setInputValue] = useState(""); // State to store input value
+    const [loading, setLoading] = useState(false); // State to manage loading state
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value); // Update input value when it changes
     };
 
     const handleButtonClick = async () => {
-        await ethService.addCandidate(inputValue);
+        setLoading(true); // Set loading state to true when "Become candidate!" button is clicked
+        try {
+            await ethService.addCandidate(inputValue);
+            setInputValue(""); // Clear input value after successful addition
+        } catch (error) {
+            // Error handling is already done in addCandidate function, so no need for additional handling here
+        } finally {
+            setLoading(false); // Reset loading state whether an error occurred or not
+        }
     };
 
     return (
@@ -68,27 +81,40 @@ const CandidateForm = ({ remainingTime, hasVoted }) => {
             <button
                 className="candidateBtn btn"
                 onClick={handleButtonClick}
-                disabled={!inputValue.trim() || remainingTime <= 0}
+                disabled={!inputValue.trim() || remainingTime <= 0 || loading}
             >
-                Become candidate!
+                {loading ? "Adding Candidate..." : "Become candidate!"}
             </button>
         </div>
     );
 };
 
-const VoteForm = ({ remainingTime, hasVoted }) => {
+const VoteForm = ({ remainingTime }) => {
     const [inputValue, setInputValue] = useState(""); // State to store input value
+    const [loading, setLoading] = useState(false); // State to manage loading state
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value); // Update input value when it changes
     };
 
-    const handleButtonClick = () => {
-        ethService.vote(inputValue);
+    const handleButtonClick = async () => {
+        setLoading(true); // Set loading state to true when vote button is clicked
+        let has = await ethService.hasVoted();
+        if (has) {
+            alert("already voted!");
+            setLoading(false);
+            return;
+        }
+        try {
+            ethService.vote(inputValue);
+            setInputValue("");
+        } catch (error) {
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        
         <div className="vote">
             <div className="form__group field">
                 <input
@@ -103,9 +129,9 @@ const VoteForm = ({ remainingTime, hasVoted }) => {
             <button
                 className="candidateBtn btn"
                 onClick={handleButtonClick}
-                disabled={!inputValue.trim() || remainingTime <= 0 || hasVoted}
+                disabled={!inputValue.trim() || remainingTime <= 0 || loading}
             >
-                Vote
+                {loading ? "Voting..." : "Vote"}
             </button>
         </div>
     );
@@ -114,7 +140,6 @@ const VoteForm = ({ remainingTime, hasVoted }) => {
 const App = () => {
     const [remainingTime, setRemainingTime] = useState(0);
     const [candidates, setCandidates] = useState([]);
-    const [hasVoted, setHasVoted] = useState(false);
 
     useEffect(() => {
         const fetchCandidates = async () => {
@@ -144,21 +169,6 @@ const App = () => {
         const interval = setInterval(fetchRemainingTime, 20 * 1000); // Update every 10 seconds
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, []);
-
-    useEffect(() => {
-        const fetchhasVoted = async () => {
-            try {
-                const has = await ethService.hasVoted();
-                setHasVoted(has);
-            } catch (error) {
-                console.error("Error fetching voted or not:", error);
-            }
-        };
-        fetchhasVoted();
-        const interval = setInterval(fetchhasVoted, 1000); // Update every 10 seconds
-
-        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -199,12 +209,14 @@ const App = () => {
                                             backgroundColor:
                                                 index % 2 === 0
                                                     ? "lightgray"
-                                                    : "transparent",
+                                                    : "#ddd",
                                         }}
                                     >
-                                        <td>{index}</td>
+                                        <td className="hj">{index + 1}</td>
                                         <td>{candidate[1]}</td>
-                                        <td>{candidate[2].toString()}</td>
+                                        <td className="hj">
+                                            {candidate[2].toString()}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

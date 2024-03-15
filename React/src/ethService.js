@@ -18,7 +18,6 @@ let accounts = await ethereum.request({
 });
 let account = accounts[0];
 
-
 export const contract = new ethers.Contract(
     contractAddress,
     contractAbi,
@@ -28,13 +27,26 @@ export const contract = new ethers.Contract(
 //getting contract functions
 export const getUserAddress = async () => {
     try {
-        
-        return account;
+        let accounts = await ethereum.request({
+            method: "eth_requestAccounts",
+            params: [],
+        });
+        return accounts[0];
     } catch (error) {
-        console.error("Error getting user address:", error.message);
+        window.alert("Error getting user address:", error.message);
         throw error;
     }
 };
+
+function extractErrorMessage(error) {
+    if (error.data && error.data.message) {
+        const match = error.data.message.match(/execution reverted: (.+)$/);
+        if (match && match.length > 1) {
+            return match[1];
+        }
+    }
+    return error.message;
+}
 
 export const getRemainingTime = async () => {
     try {
@@ -50,30 +62,52 @@ export const getRemainingTime = async () => {
 
 export const getCandidates = async () => {
     const candidates = await contract.getCandidates();
-    console.log(candidates);
     return candidates;
 };
 
 export const hasVoted = async () => {
-    const has = await contract.hasVoted(account);
-    console.log(has);
-    return has;
-}
+    try {
+        let accounts = await ethereum.request({
+            method: "eth_requestAccounts",
+            params: [],
+        });
+        account = accounts[0];
 
-export async function addCandidate(name){
-    try{
-        await contract.connect(signer).addCandidate(name);
-    }catch(error){
-        console.error("Error adding candidate:", error);
-        throw error; 
+        const has = await contract.hasVoted(account);
+        return has;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export async function addCandidate(name) {
+    try {
+        const tx = await contract.connect(signer).addCandidate(name);
+        await tx.wait(1);
+        alert(`${name} you are a candid now! `);
+    } catch (error) {
+        window.alert("Error adding candidate: " + filter(error));
+        throw error;
     }
 }
 
-export async function vote(name){
-    try{
-        await contract.connect(signer).vote(name);
-    }catch(error){
-        console.error("Error voting:", error);
-        throw error; 
+export async function vote(name) {
+    try {
+        const tx = await contract.connect(signer).vote(name);
+        console.log(tx);
+        await tx.wait(1);
+        alert(`Voted!`);
+    } catch (error) {
+        window.alert("Error voting: " + filter(error));
+        throw error;
     }
+}
+
+function filter(errorMessage) {
+    const reasonStart = 'reason="';
+    const reasonEnd = '", method=';
+    const startIndex =
+        errorMessage.toString().indexOf(reasonStart) + reasonStart.length;
+    const endIndex = errorMessage.toString().indexOf(reasonEnd);
+    return errorMessage.toString().substring(startIndex, endIndex);
 }
