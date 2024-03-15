@@ -31,6 +31,7 @@ export const getUserAddress = async () => {
             method: "eth_requestAccounts",
             params: [],
         });
+
         return accounts[0];
     } catch (error) {
         window.alert("Error getting user address:", error.message);

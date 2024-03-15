@@ -5,21 +5,13 @@ import { ethers } from "ethers";
 
 //if not connected connect
 const ConnectBtn = () => {
-    const [buttonText, setButtonText] = useState("Conecting...");
-    const handleClick = async () => {
-        try {
-            let userAddress = await ethService.getUserAddress();
-            setButtonText(userAddress);
-        } catch (error) {
-            console.error("Error fetching user address:", error);
-        }
-    };
+    const [buttonText, setButtonText] = useState("Connecting...");
+    
     useEffect(() => {
         const fetchUserAddress = async () => {
             try {
                 const userAddress = await ethService.getUserAddress();
                 setButtonText(userAddress);
-                ethService.hasVoted;
             } catch (error) {
                 console.error("Error fetching user address:", error);
                 setButtonText("Error");
@@ -29,15 +21,12 @@ const ConnectBtn = () => {
         if (window.ethereum) {
             fetchUserAddress();
 
-            // Add an event listener for 'accountsChange'
             const handleAccountsChanged = async () => {
-                handleClick();
+                fetchUserAddress();
             };
 
-            // Add the event listener
             window.ethereum.on("accountsChanged", handleAccountsChanged);
 
-            // Cleanup the event listener when the component is unmounted
             return () => {
                 window.ethereum.off("accountsChanged", handleAccountsChanged);
             };
@@ -47,22 +36,21 @@ const ConnectBtn = () => {
 };
 
 const CandidateForm = ({ remainingTime }) => {
-    const [inputValue, setInputValue] = useState(""); // State to store input value
-    const [loading, setLoading] = useState(false); // State to manage loading state
-
+    const [inputValue, setInputValue] = useState(""); 
+    const [loading, setLoading] = useState(false); 
     const handleInputChange = (event) => {
-        setInputValue(event.target.value); // Update input value when it changes
+        setInputValue(event.target.value); 
     };
 
     const handleButtonClick = async () => {
-        setLoading(true); // Set loading state to true when "Become candidate!" button is clicked
+        setLoading(true); 
         try {
             await ethService.addCandidate(inputValue);
-            setInputValue(""); // Clear input value after successful addition
+            setInputValue("");  
         } catch (error) {
-            // Error handling is already done in addCandidate function, so no need for additional handling here
+            
         } finally {
-            setLoading(false); // Reset loading state whether an error occurred or not
+            setLoading(false); 
         }
     };
 
@@ -90,15 +78,15 @@ const CandidateForm = ({ remainingTime }) => {
 };
 
 const VoteForm = ({ remainingTime }) => {
-    const [inputValue, setInputValue] = useState(""); // State to store input value
-    const [loading, setLoading] = useState(false); // State to manage loading state
+    const [inputValue, setInputValue] = useState(""); 
+    const [loading, setLoading] = useState(false);
 
     const handleInputChange = (event) => {
-        setInputValue(event.target.value); // Update input value when it changes
+        setInputValue(event.target.value); 
     };
 
     const handleButtonClick = async () => {
-        setLoading(true); // Set loading state to true when vote button is clicked
+        setLoading(true); 
         let has = await ethService.hasVoted();
         if (has) {
             alert("already voted!");
@@ -151,7 +139,7 @@ const App = () => {
             }
         };
         fetchCandidates();
-        const interval = setInterval(fetchCandidates, 10000); // Update every 10 seconds
+        const interval = setInterval(fetchCandidates, 10000); 
 
         return () => clearInterval(interval);
     }, []);
@@ -166,10 +154,9 @@ const App = () => {
             }
         };
         fetchRemainingTime();
-        const interval = setInterval(fetchRemainingTime, 20 * 1000); // Update every 10 seconds
+        const interval = setInterval(fetchRemainingTime, 20 * 1000); 
 
-        return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, []);
+        return () => clearInterval(interval); 
 
     return (
         <div className="App">
