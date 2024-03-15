@@ -1,0 +1,23 @@
+{
+  "name": "solidity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.4",
+    "@nomiclabs/hardhat-etherscan": "^3.1.8",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.21.0",
+    "hardhat-ethers": "^1.0.1",
+    "hardhat-waffle": "^0.0.1-security"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0"
+  }
+}
