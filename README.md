@@ -1,6 +1,6 @@
 # voting-Dapp
 
-![voting-Dapp Logo](./react/public/logo.png)
+![voting-Dapp Logo](./React/public/logo.png)
 
 ## Description
 voting-Dapp is a decentralized application (DApp) built with Solidity and React.
