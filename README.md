@@ -1,7 +1,5 @@
 # voting-Dapp
 
-![voting-Dapp Logo](./React/public/logo.png)
-
 ## Description
 voting-Dapp is a decentralized application (DApp) built with Solidity and React.
 It allows users to participate in secure and transparent voting processes on the Ethereum blockchain.
