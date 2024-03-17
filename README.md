@@ -6,8 +6,10 @@ Vote for your favorite memes, decide on pizza toppings, or even cast your ballot
 
 ## Demo
 
+https://github.com/lostinherdreams/Voting-Dapp/assets/92300216/ec867dfb-f4ed-4f6d-bd84-c910df0483a4
 
-Uploading Untitled video - Made with Clipchamp (4).mp4…
+
+
 
 
 
