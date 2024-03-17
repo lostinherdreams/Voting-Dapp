@@ -2,13 +2,23 @@ import { ethers } from "ethers";
 import { BigNumber } from "ethers";
 import { contractAddress, contractAbi } from "./ethConfig";
 
-//A connection to the Ethereum network .
-//It provides read-only access to the Blockchain and its status.
+export const setup = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    let accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+        params: [],
+    });
+    let account = accounts[0];
+
+    const contract = new ethers.Contract(
+        contractAddress,
+        contractAbi,
+        provider
+    );
+};
 export const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-//The MetaMask plugin also allows signing transactions to
-// send ether and pay to change state within the blockchain.
-// For this, you need the account signer.
 export const signer = provider.getSigner();
 
 //get account
@@ -24,7 +34,6 @@ export const contract = new ethers.Contract(
     provider
 );
 
-//getting contract functions
 export const getUserAddress = async () => {
     try {
         let accounts = await ethereum.request({
@@ -63,7 +72,7 @@ export const getRemainingTime = async () => {
 
 export const getCandidates = async () => {
     console.log(contract);
-    
+
     const candidates = await contract.getCandidates();
     console.log("you");
 
