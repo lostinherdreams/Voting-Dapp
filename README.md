@@ -6,7 +6,7 @@ Vote for your favorite memes, decide on pizza toppings, or even cast your ballot
 
 ## Demo
 
-![voting-Dapp Demo](./React/public/demo1.mp4)
+![voting-Dapp Demo](./React/public/demo2.mp4)
 
 ## Technologies Used
 
