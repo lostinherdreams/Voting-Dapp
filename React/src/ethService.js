@@ -4,12 +4,12 @@ import { contractAddress, contractAbi } from "./ethConfig";
 
 //A connection to the Ethereum network .
 //It provides read-only access to the Blockchain and its status.
-const provider = new ethers.providers.Web3Provider(window.ethereum);
+export const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 //The MetaMask plugin also allows signing transactions to
 // send ether and pay to change state within the blockchain.
 // For this, you need the account signer.
-const signer = provider.getSigner();
+export const signer = provider.getSigner();
 
 //get account
 let accounts = await ethereum.request({
@@ -56,13 +56,17 @@ export const getRemainingTime = async () => {
         const days = seconds.div(60 * 60 * 24);
         return parseInt(days.toString());
     } catch (error) {
-        console.error("Error getting remaining time:", error.message);
+        console.log("Error getting remaining time:", error.message);
         throw error;
     }
 };
 
 export const getCandidates = async () => {
+    console.log(contract);
+    
     const candidates = await contract.getCandidates();
+    console.log("you");
+
     return candidates;
 };
 

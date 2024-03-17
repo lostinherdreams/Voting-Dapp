@@ -18,6 +18,7 @@
     "hardhat-waffle": "^0.0.1-security"
   },
   "dependencies": {
+    "chai": "^4.4.1",
     "fs-extra": "^11.2.0"
   }
 }

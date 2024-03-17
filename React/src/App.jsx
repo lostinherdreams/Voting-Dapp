@@ -6,7 +6,7 @@ import { ethers } from "ethers";
 //if not connected connect
 const ConnectBtn = () => {
     const [buttonText, setButtonText] = useState("Connecting...");
-    
+
     useEffect(() => {
         const fetchUserAddress = async () => {
             try {
@@ -36,21 +36,20 @@ const ConnectBtn = () => {
 };
 
 const CandidateForm = ({ remainingTime }) => {
-    const [inputValue, setInputValue] = useState(""); 
-    const [loading, setLoading] = useState(false); 
+    const [inputValue, setInputValue] = useState("");
+    const [loading, setLoading] = useState(false);
     const handleInputChange = (event) => {
-        setInputValue(event.target.value); 
+        setInputValue(event.target.value);
     };
 
     const handleButtonClick = async () => {
-        setLoading(true); 
+        setLoading(true);
         try {
             await ethService.addCandidate(inputValue);
-            setInputValue("");  
+            setInputValue("");
         } catch (error) {
-            
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -78,15 +77,15 @@ const CandidateForm = ({ remainingTime }) => {
 };
 
 const VoteForm = ({ remainingTime }) => {
-    const [inputValue, setInputValue] = useState(""); 
+    const [inputValue, setInputValue] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleInputChange = (event) => {
-        setInputValue(event.target.value); 
+        setInputValue(event.target.value);
     };
 
     const handleButtonClick = async () => {
-        setLoading(true); 
+        setLoading(true);
         let has = await ethService.hasVoted();
         if (has) {
             alert("already voted!");
@@ -94,7 +93,7 @@ const VoteForm = ({ remainingTime }) => {
             return;
         }
         try {
-            ethService.vote(inputValue);
+            await ethService.vote(inputValue);
             setInputValue("");
         } catch (error) {
         } finally {
@@ -132,14 +131,16 @@ const App = () => {
     useEffect(() => {
         const fetchCandidates = async () => {
             try {
+                console.log("why");
                 const candidates = await ethService.getCandidates();
+
                 setCandidates(candidates);
             } catch (error) {
-                console.error("Error getting candidates:", error);
+                console.log("Error getting candidates:", error);
             }
         };
         fetchCandidates();
-        const interval = setInterval(fetchCandidates, 10000); 
+        const interval = setInterval(fetchCandidates, 10000);
 
         return () => clearInterval(interval);
     }, []);
@@ -150,13 +151,14 @@ const App = () => {
                 const time = await ethService.getRemainingTime();
                 setRemainingTime(time);
             } catch (error) {
-                console.error("Error fetching remaining time:", error);
+                console.log("Error fetching remaining time:", error);
             }
         };
         fetchRemainingTime();
-        const interval = setInterval(fetchRemainingTime, 20 * 1000); 
+        const interval = setInterval(fetchRemainingTime, 20 * 1000);
 
-        return () => clearInterval(interval); 
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="App">
