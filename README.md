@@ -6,7 +6,10 @@ Vote for your favorite memes, decide on pizza toppings, or even cast your ballot
 
 ## Demo
 
-![voting-Dapp Demo](./React/public/demo2.mp4)
+
+Uploading Untitled video - Made with Clipchamp (4).mp4…
+
+
 
 ## Technologies Used
 
